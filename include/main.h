@@ -30,4 +30,16 @@ void opcontrol(void);
 //#include <iostream>
 #endif
 
+extern Controller master;
+extern Motor DriveLFF;
+extern Motor DriveLFB;
+extern Motor DriveLBF;
+extern Motor DriveLBB;
+extern Motor DriveRFF;
+extern Motor DriveRFB;
+extern Motor DriveRBF;
+extern Motor DriveRBB;
+extern ADIEncoder LeftEncoder;
+extern ADIEncoder RightEncoder;
+
 #endif  // _PROS_MAIN_H_
