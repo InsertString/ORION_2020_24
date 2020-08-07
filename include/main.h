@@ -43,5 +43,6 @@ extern Motor DriveRBF;
 extern Motor DriveRBB;
 extern ADIEncoder LeftEncoder;
 extern ADIEncoder RightEncoder;
+extern ADIEncoder BackEncoder;
 
 #endif  // _PROS_MAIN_H_
