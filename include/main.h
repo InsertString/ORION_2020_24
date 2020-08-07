@@ -7,7 +7,8 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
-#include "odometry_stuff.hpp"
+#include "math.h"
+
 
 using namespace pros;
 
@@ -28,6 +29,7 @@ void opcontrol(void);
  * You can add C++-only headers here
  */
 //#include <iostream>
+#include "odometry_stuff.hpp"
 #endif
 
 extern Controller master;

@@ -1,4 +1,5 @@
 #include "main.h"
+#include "odometry_stuff.cpp"
 
 Controller master(E_CONTROLLER_MASTER);
 
@@ -36,7 +37,7 @@ void autonomous() {}
 void opcontrol() {
 
 	while (true) {
-
+		
 		pros::delay(20);
 	}
 }
