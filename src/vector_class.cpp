@@ -10,7 +10,6 @@ public:
   CVector (double a, double b) : x(a), y(b) {}
   CVector operator + (const CVector&);
   CVector operator * (const double&);
-  CVector operator = (const CVector&);
   double getLength() {
     return sqrt(pow(x, 2) + pow(y, 2));
   }
@@ -30,12 +29,5 @@ CVector CVector::operator* (const double& param) {
   CVector temp;
   temp.x = x * param;
   temp.y = y * param;
-  return temp;
-}
-
-CVector CVector::operator= (const CVector& param) {
-  CVector temp;
-  temp.x = param.x;
-  temp.y = param.y;
   return temp;
 }

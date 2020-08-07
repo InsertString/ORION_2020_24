@@ -57,7 +57,7 @@ void CalculatePosition() {
   else {
     localOffset.x = (delta_enc[BACK] / delta_angle) + sideB;
     localOffset.y = (delta_enc[RIGHT] / delta_angle) + sideR;
-    localOffset * (2 * sin((delta_angle / 2)));
+    localOffset = localOffset * (2 * sin((delta_angle / 2)));
   }
 
   // calculate global offset based on local offset
