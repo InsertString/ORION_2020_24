@@ -7,7 +7,7 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
-#include "math.h"
+#include <math.h>
 
 
 using namespace pros;
@@ -31,6 +31,7 @@ void opcontrol(void);
 //#include <iostream>
 #include "vector_class.hpp"
 #include "odometry_stuff.hpp"
+#include <iomanip>
 #endif
 
 extern Controller master;

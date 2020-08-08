@@ -70,9 +70,13 @@ void opcontrol() {
 		//pros::delay(10);
 
 		lcd::print(0, "[%4.0f], [%4.0f], [%4.0f] ", DistCM(0), DistCM(1), DistCM(2));
-		lcd::print(1, "x:[%4.0f], y:[%4.0f]", GlobalPosition.x, GlobalPosition.y);
-		lcd::print(2, "x:[%4.0f], y:[%4.0f]", localOffset.x, localOffset.y);
-		lcd::print(3, "gA:[%4.2f], dA:[%4.2f]", global_angle * 180 / 3.1415, delta_angle);
+		lcd::print(1, "x:[%3.0f], y:[%3.0f]", GlobalPosition.x, GlobalPosition.y);
+		lcd::print(2, "x:[%3.0f], y:[%3.0f]", localOffset.x, localOffset.y);
+		lcd::print(3, "gA:[%4.0f], dA:[%4.0f]", global_angle * 180 / 3.1415, delta_angle);
+
+
+		std::cout << std::setw(5) << floor(GlobalPosition.x) << std::setw(5) << floor(GlobalPosition.y) << std::setw(5) << floor(global_angle * 180 / 3.1415) << std::endl;
+
 
 
 		if (master.get_digital(DIGITAL_B)) {

@@ -12,6 +12,13 @@ double DistCM(int a) {
   else return (BackEncoder.get_value() / 360.0 * 25.9);
 }
 
+
+double gyro_value() {
+  int factor_of_360 = 0;
+  factor_of_360 = gyro.get_rotation() / 360;
+  return gyro.get_rotation() - (360 * factor_of_360);
+}
+
 double sideL = 17.5;
 double sideR = 17.5;
 double sideB = 16;
@@ -47,7 +54,7 @@ void CalculateXY() {
 void CalculatePosition() {
   if (gyro.is_calibrating() == false) {
     // setup for next reset
-    past_angle = (gyro.get_rotation() / 180 * 3.1415);
+    past_angle = (gyro_value() / 180 * 3.1415);
     for (int i = 0; i < 3; i++) {
       past_enc[i] = DistCM(i);
     }
@@ -62,8 +69,8 @@ void CalculatePosition() {
     }
 
     // calculate change in angle
-    new_angle = (gyro.get_rotation() / 180 * 3.1415);
-    global_angle = (gyro.get_rotation() / 180 * 3.1415) + (3.1415 / 2);
+    new_angle = (gyro_value() / 180 * 3.1415);
+    global_angle = (gyro_value() / 180 * 3.1415);
 
     delta_angle = new_angle - past_angle;
 
@@ -71,11 +78,11 @@ void CalculatePosition() {
     localOffset.x = delta_enc[BACK] + (delta_angle * sideB);
     localOffset.y = (0.5 * (delta_enc[LEFT] - delta_enc[RIGHT])) + delta_enc[RIGHT];
 
-    local_y.x = localOffset.y * asin(past_global_angle);
-    local_y.y = localOffset.y * acos(past_global_angle);
+    local_y.x = localOffset.y * sin(global_angle);
+    local_y.y = localOffset.y * cos(global_angle);
 
-    local_x.x = localOffset.x * asin(past_global_angle);
-    local_x.y = localOffset.y * acos(past_global_angle);
+    local_x.x = localOffset.x * cos(-global_angle);
+    local_x.y = localOffset.x * sin(-global_angle);
 
     globalOffset = local_y + local_x;
 
