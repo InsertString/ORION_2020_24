@@ -3,7 +3,7 @@
 
 double DistCM(int a);
 void CalculatePosition();
-void CalculateXY();
+void odomDebug();
 
 extern double past_angle;
 extern double new_angle;

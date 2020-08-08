@@ -43,9 +43,6 @@ void competition_initialize() {}
 void autonomous() {}
 
 void opcontrol() {
-	GlobalPosition.x = 0;
-	GlobalPosition.y = 0;
-
 	int pow = 0;
 	int turn = 0;
 	int side = 0;
@@ -65,9 +62,8 @@ void opcontrol() {
 		DriveRFB = -pow + turn - side;
 		DriveRBF = pow - turn - side;
 		DriveRBB = -pow + turn + side;
-//*/
+
 		CalculatePosition();
-		//pros::delay(10);
 
 		lcd::print(0, "[%4.0f], [%4.0f], [%4.0f] ", DistCM(0), DistCM(1), DistCM(2));
 		lcd::print(1, "x:[%3.0f], y:[%3.0f]", GlobalPosition.x, GlobalPosition.y);
@@ -75,7 +71,7 @@ void opcontrol() {
 		lcd::print(3, "gA:[%4.0f], dA:[%4.0f]", global_angle * 180 / 3.1415, delta_angle);
 
 
-		std::cout << std::setw(5) << floor(GlobalPosition.x) << std::setw(5) << floor(GlobalPosition.y) << std::setw(5) << floor(global_angle * 180 / 3.1415) << std::endl;
+		odomDebug();
 
 
 

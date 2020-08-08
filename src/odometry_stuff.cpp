@@ -19,6 +19,10 @@ double gyro_value() {
   return gyro.get_rotation() - (360 * factor_of_360);
 }
 
+void odomDebug() {
+  std::cout << std::setw(5) << floor(GlobalPosition.x) << std::setw(5) << floor(GlobalPosition.y) << std::setw(5) << floor(global_angle * 180 / 3.1415) << std::endl;
+}
+
 double sideL = 17.5;
 double sideR = 17.5;
 double sideB = 16;
@@ -52,7 +56,10 @@ void CalculateXY() {
 
 
 void CalculatePosition() {
+  // only run the position calculations when the gyro is not initializing
+  // other wise the positions will error out at infinity
   if (gyro.is_calibrating() == false) {
+
     // setup for next reset
     past_angle = (gyro_value() / 180 * 3.1415);
     for (int i = 0; i < 3; i++) {
@@ -75,8 +82,18 @@ void CalculatePosition() {
     delta_angle = new_angle - past_angle;
 
     // calculate localOffset
+
+    // local offset x term is based on the change in the back encoder and the arc formed by the
+    // gyro value with identical radius to the back encoder, this simulates having a front encoder
     localOffset.x = delta_enc[BACK] + (delta_angle * sideB);
+
+    // local offset y term is based on triangles
     localOffset.y = (0.5 * (delta_enc[LEFT] - delta_enc[RIGHT])) + delta_enc[RIGHT];
+
+    // in order to convert the local offset vector to a global offset vector, you need
+    // to turn each component of the local position vector into global position vector rotated
+    // by the global angle.
+    // then combine the two new global vectors to get a global offset vector.
 
     local_y.x = localOffset.y * sin(global_angle);
     local_y.y = localOffset.y * cos(global_angle);
@@ -86,7 +103,7 @@ void CalculatePosition() {
 
     globalOffset = local_y + local_x;
 
-    // calculate global position
+    // calculate global position based on the change from the prervious global position
     GlobalPosition = pastGlobalPosition + globalOffset;
   }
 }
