@@ -1,24 +1,28 @@
 #include "main.h"
 #include "odometry_stuff.hpp"
-#include "vector_class.cpp"
 
 using namespace std;
 
+// (90 encoderticks / 1 rot) * (1 rot / circumfrance)
+
 // wheels are 200mm circumfrance
 double DistCM(int a) {
-  if (a == 0) return LeftEncoder.get_value() * 45;
-  else if (a == 1) return RightEncoder.get_value() * 45;
-  else return BackEncoder.get_value() * 45;
+  if (a == 0) return (LeftEncoder.get_value() / 360.0 * 20.0);
+  else if (a == 1) return (RightEncoder.get_value() / 360.0 * 20.0);
+  else return (BackEncoder.get_value() / 360.0 * 25.9);
 }
 
-double sideL = 15;
-double sideR = 15;
-double sideB = 15;
+double sideL = 17.5;
+double sideR = 17.5;
+double sideB = 16;
 
-CVector pastGlobalPosition;
-CVector GlobalPosition;
-CVector localOffset;
-CVector globalOffset;
+CVector pastGlobalPosition(0,0);
+CVector GlobalPosition(0,0);
+CVector localOffset(0,0);
+CVector globalOffset(0,0);
+
+CVector local_x(0,0);
+CVector local_y(0,0);
 
 double delta_enc[3] = {0,0,0};
 double past_enc[3] = {0,0,0};
@@ -34,51 +38,48 @@ double global_angle = 0;
 #define RIGHT 1
 #define BACK 2
 
+
+void CalculateXY() {
+
+}
+
+
 void CalculatePosition() {
+  if (gyro.is_calibrating() == false) {
+    // setup for next reset
+    past_angle = (gyro.get_rotation() / 180 * 3.1415);
+    for (int i = 0; i < 3; i++) {
+      past_enc[i] = DistCM(i);
+    }
+    pastGlobalPosition = GlobalPosition;
 
-  // delay for values of encoders to change
-  pros::delay(10);
+    // delay for values of encoders to change
+    delay(20);
 
-  // calulate change in encoder values
-  for (int i = 0; i < 3; i++) {
-    delta_enc[i] = DistCM(i) - past_enc[i];
+    // calulate change in encoder values
+    for (int i = 0; i < 3; i++) {
+      delta_enc[i] = DistCM(i) - past_enc[i];
+    }
+
+    // calculate change in angle
+    new_angle = (gyro.get_rotation() / 180 * 3.1415);
+    global_angle = (gyro.get_rotation() / 180 * 3.1415) + (3.1415 / 2);
+
+    delta_angle = new_angle - past_angle;
+
+    // calculate localOffset
+    localOffset.x = delta_enc[BACK] + (delta_angle * sideB);
+    localOffset.y = (0.5 * (delta_enc[LEFT] - delta_enc[RIGHT])) + delta_enc[RIGHT];
+
+    local_y.x = localOffset.y * asin(past_global_angle);
+    local_y.y = localOffset.y * acos(past_global_angle);
+
+    local_x.x = localOffset.x * asin(past_global_angle);
+    local_x.y = localOffset.y * acos(past_global_angle);
+
+    globalOffset = local_y + local_x;
+
+    // calculate global position
+    GlobalPosition = pastGlobalPosition + globalOffset;
   }
-
-  // calculate change in angle
-  new_angle = past_angle + ((delta_enc[LEFT] - delta_enc[RIGHT]) / (sideL + sideR));
-
-  delta_angle = new_angle - past_angle;
-
-  // calculate localOffset
-  if (delta_angle == 0) {
-    localOffset.x = delta_enc[BACK];
-    localOffset.y = delta_enc[RIGHT];
-  }
-  else {
-    localOffset.x = (delta_enc[BACK] / delta_angle) + sideB;
-    localOffset.y = (delta_enc[RIGHT] / delta_angle) + sideR;
-    localOffset = localOffset * (2 * sin((delta_angle / 2)));
-  }
-
-  // calculate global offset based on local offset
-  average_angle = past_global_angle + (delta_angle / 2);
-
-  double polar_rad;
-  double polar_angle;
-  polar_rad = localOffset.getLength();
-  polar_angle = -average_angle;
-
-  globalOffset.x = (acos(polar_angle) * polar_rad);
-  globalOffset.y = (asin(polar_angle) * polar_rad);
-
-  // calculate global position
-  GlobalPosition = pastGlobalPosition + globalOffset;
-
-  // setup for next reset
-  past_global_angle = GlobalPosition.getAngle();
-  past_angle = new_angle;
-  for (int i = 0; i < 3; i++) {
-    past_enc[i] = DistCM(i);
-  }
-  pastGlobalPosition = GlobalPosition;
 }

@@ -1,22 +1,18 @@
 #include "main.h"
-#include "math.h"
+#include "vector_class.hpp"
 
 using namespace std;
 
-class CVector {
-public:
-  double x, y;
-  CVector (){}
-  CVector (double a, double b) : x(a), y(b) {}
-  CVector operator + (const CVector&);
-  CVector operator * (const double&);
-  double getLength() {
-    return sqrt(pow(x, 2) + pow(y, 2));
-  }
-  double getAngle() {
-    return tan(y / x);
-  }
-};
+double CVector::getLength() {
+  return sqrt(pow(x, 2) + pow(y, 2));
+}
+
+double CVector::getAngle() {
+  if (x != 0) return tan(y / x);
+  else if (y > 0) return (3.14159 / 2);
+  else if (y < 0) return (3 * 3.14159 / 2);
+  else return 0;
+}
 
 CVector CVector::operator+ (const CVector& param) {
   CVector temp;

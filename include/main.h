@@ -29,6 +29,7 @@ void opcontrol(void);
  * You can add C++-only headers here
  */
 //#include <iostream>
+#include "vector_class.hpp"
 #include "odometry_stuff.hpp"
 #endif
 
@@ -44,5 +45,11 @@ extern Motor DriveRBB;
 extern ADIEncoder LeftEncoder;
 extern ADIEncoder RightEncoder;
 extern ADIEncoder BackEncoder;
+extern Imu gyro;
+
+extern CVector GlobalPosition;
+extern CVector pastGlobalPosition;
+extern CVector localOffset;
+extern CVector globalOffset;
 
 #endif  // _PROS_MAIN_H_
