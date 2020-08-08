@@ -30,10 +30,20 @@ ADIEncoder BackEncoder(B_ENC_PORT1, B_ENC_PORT2);
 
 Imu gyro(12);
 
+bool start_tracking = false;
+
+void odom_task(void* param) {
+	while (true) {
+		CalculatePosition();
+		odomDebug();
+	}
+}
+
+Task odom (odom_task, NULL, TASK_PRIORITY_DEFAULT-1, TASK_STACK_DEPTH_DEFAULT, "ODOM");
+
 void initialize() {
 	pros::lcd::initialize();
 	gyro.reset();
-	delay(100);
 }
 
 void disabled() {}
@@ -47,11 +57,8 @@ void opcontrol() {
 	int turn = 0;
 	int side = 0;
 
-	while (true) {
 
-		pow = -master.get_analog(ANALOG_LEFT_Y);
-		side = -master.get_analog(ANALOG_LEFT_X);
-		turn = master.get_analog(ANALOG_RIGHT_X);
+	while (true) {
 
 		DriveLFF = -pow - turn + side;
 		DriveLFB = pow + turn - side;
@@ -63,22 +70,53 @@ void opcontrol() {
 		DriveRBF = pow - turn - side;
 		DriveRBB = -pow + turn + side;
 
-		CalculatePosition();
-
+		//CalculatePosition();
+/*
 		lcd::print(0, "[%4.0f], [%4.0f], [%4.0f] ", DistCM(0), DistCM(1), DistCM(2));
 		lcd::print(1, "x:[%3.0f], y:[%3.0f]", GlobalPosition.x, GlobalPosition.y);
 		lcd::print(2, "x:[%3.0f], y:[%3.0f]", localOffset.x, localOffset.y);
 		lcd::print(3, "gA:[%4.0f], dA:[%4.0f]", global_angle * 180 / 3.1415, delta_angle);
-
-
-		odomDebug();
+*/
 
 
 
 		if (master.get_digital(DIGITAL_B)) {
-			LeftEncoder.reset();
-			RightEncoder.reset();
-			BackEncoder.reset();
+			if (floor(global_angle_d()) > 0) {
+				turn = -20;
+			}
+			else if (floor(global_angle_d()) < 0) {
+				turn = 20;
+			}
+			else {
+				turn = 0;
+			}
+
+			if (floor(GlobalPosition.x) > 0) {
+				side = 20;
+			}
+			else if (floor(GlobalPosition.x) < 0) {
+				side = -20;
+			}
+			else {
+				side = 0;
+			}
+
+			if (floor(GlobalPosition.y) > 0) {
+				pow = 20;
+			}
+			else if (floor(GlobalPosition.y) < 0) {
+				pow = -20;
+			}
+			else {
+				pow = 0;
+			}
 		}
+		else {
+			pow = -master.get_analog(ANALOG_LEFT_Y);
+			side = -master.get_analog(ANALOG_LEFT_X);
+			turn = master.get_analog(ANALOG_RIGHT_X);
+		}
+
+		delay(20);
 	}
 }

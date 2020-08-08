@@ -20,7 +20,7 @@ double gyro_value() {
 }
 
 void odomDebug() {
-  std::cout << std::setw(5) << floor(GlobalPosition.x) << std::setw(5) << floor(GlobalPosition.y) << std::setw(5) << floor(global_angle * 180 / 3.1415) << std::endl;
+  printf("%4.0f, %4.0f, %4.0f\n", GlobalPosition.x, GlobalPosition.y, (global_angle * 180 / 3.1415));
 }
 
 double sideL = 17.5;
@@ -45,14 +45,13 @@ double delta_angle = 0;
 double past_global_angle = 0;
 double global_angle = 0;
 
+double global_angle_d() {
+  return global_angle * 180 / 3.1415;
+}
+
 #define LEFT 0
 #define RIGHT 1
 #define BACK 2
-
-
-void CalculateXY() {
-
-}
 
 
 void CalculatePosition() {
@@ -105,5 +104,9 @@ void CalculatePosition() {
 
     // calculate global position based on the change from the prervious global position
     GlobalPosition = pastGlobalPosition + globalOffset;
+  }
+  else {
+    GlobalPosition.x = 0;
+    GlobalPosition.y = 0;
   }
 }
