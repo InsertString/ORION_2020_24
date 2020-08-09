@@ -25,7 +25,7 @@ void odomDebug() {
 
 double sideL = 17.5;
 double sideR = 17.5;
-double sideB = 16;
+double sideB = 16.75;
 
 CVector pastGlobalPosition(0,0);
 CVector GlobalPosition(0,0);

@@ -31,6 +31,8 @@ void opcontrol(void);
 //#include <iostream>
 #include "vector_class.hpp"
 #include "odometry_stuff.hpp"
+#include "drive_control.hpp"
+#include "PID.hpp"
 #include <iomanip>
 #endif
 

@@ -35,7 +35,7 @@ bool start_tracking = false;
 void odom_task(void* param) {
 	while (true) {
 		CalculatePosition();
-		odomDebug();
+		//odomDebug();
 	}
 }
 
@@ -53,68 +53,21 @@ void competition_initialize() {}
 void autonomous() {}
 
 void opcontrol() {
-	int pow = 0;
-	int turn = 0;
-	int side = 0;
-
 
 	while (true) {
+		//powerDrive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_RIGHT_X));
 
-		DriveLFF = -pow - turn + side;
-		DriveLFB = pow + turn - side;
-		DriveLBF = -pow - turn - side;
-		DriveLBB = pow + turn + side;
-
-		DriveRFF = pow - turn + side;
-		DriveRFB = -pow + turn - side;
-		DriveRBF = pow - turn - side;
-		DriveRBB = -pow + turn + side;
-
-		//CalculatePosition();
-/*
-		lcd::print(0, "[%4.0f], [%4.0f], [%4.0f] ", DistCM(0), DistCM(1), DistCM(2));
-		lcd::print(1, "x:[%3.0f], y:[%3.0f]", GlobalPosition.x, GlobalPosition.y);
-		lcd::print(2, "x:[%3.0f], y:[%3.0f]", localOffset.x, localOffset.y);
-		lcd::print(3, "gA:[%4.0f], dA:[%4.0f]", global_angle * 180 / 3.1415, delta_angle);
-*/
-
-
-
-		if (master.get_digital(DIGITAL_B)) {
-			if (floor(global_angle_d()) > 0) {
-				turn = -20;
-			}
-			else if (floor(global_angle_d()) < 0) {
-				turn = 20;
-			}
-			else {
-				turn = 0;
-			}
-
-			if (floor(GlobalPosition.x) > 0) {
-				side = 20;
-			}
-			else if (floor(GlobalPosition.x) < 0) {
-				side = -20;
-			}
-			else {
-				side = 0;
-			}
-
-			if (floor(GlobalPosition.y) > 0) {
-				pow = 20;
-			}
-			else if (floor(GlobalPosition.y) < 0) {
-				pow = -20;
-			}
-			else {
-				pow = 0;
-			}
+		if (master.get_digital(DIGITAL_A)) {
+			drive_to_point(10, 10, -180);
+		}
+		else if (master.get_digital(DIGITAL_B)) {
+			drive_to_point(0, 0, 0);
+		}
+		else if (master.get_digital(DIGITAL_Y)) {
+			drive_to_point(-10, -10, -90);
 		}
 		else {
-			pow = -master.get_analog(ANALOG_LEFT_Y);
-			side = -master.get_analog(ANALOG_LEFT_X);
-			turn = master.get_analog(ANALOG_RIGHT_X);
+			powerDrive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_RIGHT_X));
 		}
 
 		delay(20);
