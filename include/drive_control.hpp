@@ -5,4 +5,6 @@ void powerDrive(double y, double x, double theta);
 
 void drive_to_point(double targ_y, double targ_x, double targ_theta);
 
+void drive_with_point(double targ_y, double targ_x, double targ_theta);
+
 #endif

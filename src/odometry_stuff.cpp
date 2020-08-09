@@ -16,11 +16,11 @@ double DistCM(int a) {
 double gyro_value() {
   int factor_of_360 = 0;
   factor_of_360 = gyro.get_rotation() / 360;
-  return gyro.get_rotation() - (360 * factor_of_360);
+  return gyro.get_rotation();// - (360 * factor_of_360);
 }
 
 void odomDebug() {
-  printf("%4.0f, %4.0f, %4.0f\n", GlobalPosition.x, GlobalPosition.y, (global_angle * 180 / 3.1415));
+  printf("%4.0f, %4.0f, %4.0f\n", GlobalPosition.x, GlobalPosition.y, gyro_value());
 }
 
 double sideL = 17.5;

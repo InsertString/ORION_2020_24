@@ -33,6 +33,7 @@ void opcontrol(void);
 #include "odometry_stuff.hpp"
 #include "drive_control.hpp"
 #include "PID.hpp"
+#include "timing.hpp"
 #include <iomanip>
 #endif
 

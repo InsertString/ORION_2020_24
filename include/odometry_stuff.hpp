@@ -5,6 +5,7 @@ double DistCM(int a);
 void CalculatePosition();
 void odomDebug();
 double global_angle_d();
+double gyro_value();
 
 extern double past_angle;
 extern double new_angle;

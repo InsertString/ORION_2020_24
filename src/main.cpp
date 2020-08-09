@@ -54,21 +54,46 @@ void autonomous() {}
 
 void opcontrol() {
 
+	double x_t = 0;
+	double y_t = 0;
+	double angle = 0;
+	bool start = false;
+
 	while (true) {
-		//powerDrive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_RIGHT_X));
+		//printf("%4.0f raw, %4.0f func, %4.0f funcd, %4.0f glob\n", gyro.get_rotation(), gyro_value(), global_angle_d(), global_angle);
 
 		if (master.get_digital(DIGITAL_A)) {
-			drive_to_point(10, 10, -180);
+			drive_to_point(0, 40, 0);
+		}
+		else if (master.get_digital_new_press(DIGITAL_X)) {
+			start = true;
+			startTimer(DRIVE_TEST);
+		}
+		else if (start == true && getTime(DRIVE_TEST) < 2510) {
+			angle = getTime(DRIVE_TEST) / 10 * 0.36;
+			x_t = 40 * (cos(angle / 180 * 3.14159));
+			y_t = 40 * (sin(angle / 180 * 3.14159));
+
+			drive_with_point(y_t, x_t, -angle);
+		}
+		else {
+			powerDrive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_RIGHT_X));
+		}
+
+		/*
+		if (master.get_digital(DIGITAL_A)) {
+			drive_to_point(0, 0, 180);
 		}
 		else if (master.get_digital(DIGITAL_B)) {
 			drive_to_point(0, 0, 0);
 		}
 		else if (master.get_digital(DIGITAL_Y)) {
-			drive_to_point(-10, -10, -90);
+			drive_to_point(0, 0, 270);
 		}
 		else {
 			powerDrive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_RIGHT_X));
 		}
+		*/
 
 		delay(20);
 	}
