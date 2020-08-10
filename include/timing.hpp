@@ -5,7 +5,9 @@
 #define AUTO_TIMER 0
 #define AUTO_STEP_TIMER 1
 
-#define DRIVE_TEST 2
+#define TEST_TIMER 2
+
+#define
 
 
 void startTimer(int slot);

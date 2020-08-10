@@ -67,10 +67,10 @@ void opcontrol() {
 		}
 		else if (master.get_digital_new_press(DIGITAL_X)) {
 			start = true;
-			startTimer(DRIVE_TEST);
+			startTimer(TEST_TIMER);
 		}
-		else if (start == true && getTime(DRIVE_TEST) < 2510) {
-			angle = getTime(DRIVE_TEST) / 10 * 0.36;
+		else if (start == true && getTime(TEST_TIMER) < 2510) {
+			angle = getTime(TEST_TIMER) / 10 * 0.36;
 			x_t = 40 * (cos(angle / 180 * 3.14159));
 			y_t = 40 * (sin(angle / 180 * 3.14159));
 

@@ -34,6 +34,7 @@ void opcontrol(void);
 #include "drive_control.hpp"
 #include "PID.hpp"
 #include "timing.hpp"
+#include "auto_functions.hpp"
 #include <iomanip>
 #endif
 
