@@ -7,7 +7,7 @@
 
 #define TEST_TIMER 2
 
-#define
+#define AUTO_CIRCLE_TIMER 3
 
 
 void startTimer(int slot);

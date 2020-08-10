@@ -58,24 +58,32 @@ void opcontrol() {
 	double y_t = 0;
 	double angle = 0;
 	bool start = false;
+	int test_step = 0;
+	CVector test_center(-50,0);
 
 	while (true) {
 		//printf("%4.0f raw, %4.0f func, %4.0f funcd, %4.0f glob\n", gyro.get_rotation(), gyro_value(), global_angle_d(), global_angle);
 
 		if (master.get_digital(DIGITAL_A)) {
-			drive_to_point(0, 40, 0);
+			drive_to_point(0, 20, 0);
 		}
 		else if (master.get_digital_new_press(DIGITAL_X)) {
 			start = true;
-			startTimer(TEST_TIMER);
+			test_step = 0;
+			//startTimer(TEST_TIMER);
 		}
-		else if (start == true && getTime(TEST_TIMER) < 2510) {
+		else if (start == true) {
+			auto_drive_circle(50, 1.75, 90, test_center, COUNTER, test_step);
+
+			if (test_step == 2) start = false;
+		}
+	/*	else if (start == true && getTime(TEST_TIMER) < 2510) {
 			angle = getTime(TEST_TIMER) / 10 * 0.36;
 			x_t = 40 * (cos(angle / 180 * 3.14159));
 			y_t = 40 * (sin(angle / 180 * 3.14159));
 
 			drive_with_point(y_t, x_t, -angle);
-		}
+		}*/
 		else {
 			powerDrive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_RIGHT_X));
 		}

@@ -59,8 +59,8 @@ void drive_with_point(double targ_y, double targ_x, double targ_theta) {
   double local_target_y = (targ_y * (cos(global_angle))) + (targ_x * (sin(global_angle)));
   double local_target_x = (targ_x * (cos(global_angle))) + (-targ_y * (sin(global_angle)));
 
-  yPID.set_PID_variables(local_target_y, 30, -30, 5);
-  xPID.set_PID_variables(local_target_x, 30, -30, 5);
+  yPID.set_PID_variables(local_target_y, 50, -50, 5);
+  xPID.set_PID_variables(local_target_x, 50, -50, 5);
 
 
   thetaPID.set_PID_variables(targ_theta, 120, -120, 0);
