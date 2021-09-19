@@ -1,12 +1,11 @@
 #include "main.h"
 
-using namespace pros;
 
 Controller master(E_CONTROLLER_MASTER);
 
 // drive motors
 Motor DriveLFF(1);
-Motor DriveLFB(11);
+Motor DriveLFB(1);
 
 Motor DriveLBF(3);
 Motor DriveLBB(4);
@@ -14,8 +13,16 @@ Motor DriveLBB(4);
 Motor DriveRFF(6);
 Motor DriveRFB(20);
 
-Motor DriveRBF(9);
-Motor DriveRBB(10);
+Motor DriveRBF(6);
+Motor DriveRBB(7);
+
+Motor IntakeL(9);
+Motor IntakeR(10);
+Motor IntakeTower(16);
+Motor IntakeOutput(11);
+
+Motor FlipLeft(1);
+Motor FlipRight(2);
 
 // drive encoders
 #define L_ENC_PORT1 1
@@ -102,6 +109,40 @@ void opcontrol() {
 			powerDrive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_RIGHT_X));
 		}
 		*/
+
+		if (master.get_digital(DIGITAL_R1)) {
+			IntakeL = 127;
+			IntakeR = -127;
+		}
+		else if (master.get_digital(DIGITAL_R2)) {
+			IntakeL = -127;
+			IntakeR = 127;
+		}
+		else {
+			IntakeL = 0;
+			IntakeR = 0;
+		}
+
+		if (master.get_digital(DIGITAL_L1)) {
+			IntakeTower = 127;
+		}
+		else if (master.get_digital(DIGITAL_L2)) {
+			IntakeTower = -127;
+		}
+		else {
+			IntakeTower = 0;
+		}
+
+
+		if (master.get_digital(DIGITAL_UP)) {
+			IntakeOutput = 127;
+		}
+		else if (master.get_digital(DIGITAL_DOWN)) {
+			IntakeOutput = -127;
+		}
+		else {
+			IntakeOutput = 0;
+		}
 
 		delay(20);
 	}
